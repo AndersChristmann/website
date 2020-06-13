@@ -6,6 +6,12 @@ const ejs = require('ejs')
 const BlogPost = require('./models/BlogPost.js')
 const fileUpload = require('express-fileupload')
 
+const validateMiddleWare = (req, res, next)=>{
+    if(req.files == null || req.body.title == null || req.body.title == null){
+        return res.redirect('/posts/new')
+    }
+    next()
+}
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
 
@@ -20,6 +26,8 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 app.use(fileUpload())
+
+app.use('/posts/store', validateMiddleWare)
 
 app.post('/posts/store', async (req, res) =>{
     let image = req.files.image;
