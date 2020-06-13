@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const BlogPost = require('./models/BlogPost.js')
+const fileUpload = require('express-fileupload')
 
 
 mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
@@ -18,10 +19,18 @@ app.set('view engine', 'ejs')
 
 app.use(express.static('public'))
 
+app.use(fileUpload())
 
 app.post('/posts/store', async (req, res) =>{
-    await BlogPost.create(req.body)
-    res.redirect('/')
+    let image = req.files.image;
+    image.mv(path.resolve(__dirname, 'public/img', image.name), async(error) => {
+        await BlogPost.create({
+            ...req.body,
+            image:'/img/' + image.name
+        })
+        res.redirect('/')
+    })
+
 })
 
 app.get('/', async (req,res)=>{
