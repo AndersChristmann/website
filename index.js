@@ -25,7 +25,7 @@ const redirectIfAuthenticatedMiddlewWare = require('./middleware/redirectIfAuthe
 
 global.loggedIn = null;
 
-mongoose.connect('mongodb://localhost/my_database', {useNewUrlParser: true})
+mongoose.connect('mongodb+srv://anders_christmann:anders54340@cluster0-4j288.mongodb.net/website_database', {useNewUrlParser: true})
 
 const app = new express()
 
@@ -64,6 +64,11 @@ app.get('/auth/logout', logoutController)
 app.use((req, res) => res.render('notfound'));
 
 
-app.listen(4000, ()=>{
-    console.log('App listening on port 4000')
+let port = process.env.PORT;
+if (port == null || port == "") {
+    port = 4000;
+}
+
+app.listen(port, ()=> {
+    console.log('App listening...')
 })
