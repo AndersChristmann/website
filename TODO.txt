@@ -1,0 +1,2 @@
+- Create validation, display of validation errors and persisting form data for creating blog posts.
+- Create error when login is incorrect
