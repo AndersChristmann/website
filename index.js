@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
 const fileUpload = require('express-fileupload')
+const flash = require('connect-flash')
 
 //Controllers
 const newPostController = require('./controllers/newPost')
@@ -49,25 +50,19 @@ app.use("*", (req, res, next) => {
     next()
 });
 
+app.use(flash());
+
 app.post('/posts/store', authMiddleWare, storePostController)
-
 app.get('/', homeController)
-
 app.get('/post/:id', getPostController)
-
 app.get('/posts/new', authMiddleWare, newPostController)
-
 app.get('/auth/register', redirectIfAuthenticatedMiddlewWare, newUserController)
-
 app.post('/users/register', redirectIfAuthenticatedMiddlewWare, storeUserController)
-
 app.get('/auth/login', redirectIfAuthenticatedMiddlewWare, loginController)
-
 app.post('/users/login', redirectIfAuthenticatedMiddlewWare, loginUserController)
-
 app.get('/auth/logout', logoutController)
-
 app.use((req, res) => res.render('notfound'));
+
 
 app.listen(4000, ()=>{
     console.log('App listening on port 4000')
